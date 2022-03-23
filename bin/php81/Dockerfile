@@ -6,7 +6,7 @@ FROM php:8.1-fpm-alpine3.15
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Update
-RUN apt-get -y update --fix-missing && \
+RUN apt-get -y update --fix-missing --no-install-recommends --no-install-suggests  && \
     apt-get upgrade -y && \
     apt-get --no-install-recommends install -y apt-utils && \
     rm -rf /var/lib/apt/lists/*

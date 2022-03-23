@@ -8,14 +8,14 @@ FROM php:7.2-apache-stretch
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get -y update --fix-missing --no-install-recommends
+RUN apt-get -y update --fix-missing --no-install-recommends --no-install-suggests 
 RUN apt-get -y upgrade
 
 # Install useful tools
-RUN apt-get -yq install apt-utils nano wget dialog
+RUN apt-get -yq install --no-install-recommends --no-install-suggests  apt-utils nano wget dialog
 
 # Install important libraries
-RUN apt-get -y install --fix-missing apt-utils build-essential git curl libcurl3 libcurl3-dev zip openssl
+RUN apt-get -y install --fix-missing --no-install-recommends --no-install-suggests  apt-utils build-essential git curl libcurl3 libcurl3-dev zip openssl
 
 # Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
