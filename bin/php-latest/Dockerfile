@@ -92,4 +92,5 @@ libpng-dev && \
 RUN a2enmod rewrite headers
 
 # Cleanup
-RUN rm -rf /usr/src/*
+RUN apt-get purge -y --auto-remove \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /usr/src/*

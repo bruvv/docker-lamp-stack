@@ -54,3 +54,6 @@ RUN docker-php-ext-install -j$(nproc) gd
 
 # Enable apache modules
 RUN a2enmod rewrite headers
+
+RUN apt-get purge -y --auto-remove \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /usr/src/*
