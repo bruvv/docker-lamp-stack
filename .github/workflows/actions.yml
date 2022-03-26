@@ -1,0 +1,4 @@
+- name: Super-Linter
+  uses: github/super-linter@v4.9.1
+- name: yq - portable yaml processor
+  uses: mikefarah/yq@v4.23.1
