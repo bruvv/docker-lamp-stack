@@ -30,6 +30,7 @@ services:
       - php
     volumes:
       - ${DOCUMENT_ROOT-./www}:/var/www/html
+      - ${NGINX_LOG_DIR-./logs/nginx}:/var/log/nginx/
       - ${NGINX_CONF-./config/nginx/nginx.conf}:/etc/nginx/nginx.conf
 
   database:
