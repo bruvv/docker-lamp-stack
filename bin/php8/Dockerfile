@@ -1,12 +1,17 @@
-FROM php:fpm-alpine
+FROM php:8.0.17-apache-buster
 
 # Surpresses debconf complaints of trying to install apt packages interactively
 # https://github.com/moby/moby/issues/4032#issuecomment-192327844
- 
+
 ARG DEBIAN_FRONTEND=noninteractive
 
+# Install pickle
+ENV PICKLE_VERSION=0.7.9
+RUN curl -Lo /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/download/v$PICKLE_VERSION/pickle.phar && \
+    chmod +x /usr/local/bin/pickle
+
 # Update
-RUN apt-get -y update --fix-missing --no-install-recommends --no-install-suggests && \
+RUN apt-get -y update --fix-missing && \
     apt-get upgrade -y && \
     apt-get --no-install-recommends install -y apt-utils && \
     rm -rf /var/lib/apt/lists/*
@@ -15,31 +20,32 @@ RUN apt-get -y update --fix-missing --no-install-recommends --no-install-suggest
 # Install useful tools and install important libaries
 RUN apt-get -y update && \
     apt-get -y --no-install-recommends install nano wget \
-dialog \
-libsqlite3-dev \
-libsqlite3-0 && \
+    dialog \
+    libsqlite3-dev \
+    libsqlite3-0 && \
     apt-get -y --no-install-recommends install default-mysql-client \
-zlib1g-dev \
-libzip-dev \
-libicu-dev && \
+    zlib1g-dev \
+    libzip-dev \
+    libicu-dev && \
     apt-get -y --no-install-recommends install --fix-missing apt-utils \
-build-essential \
-git \
-curl \
-libonig-dev && \ 
+    build-essential \
+    git \
+    curl \
+    libonig-dev && \ 
     apt-get -y --no-install-recommends install --fix-missing libcurl4 \
-libcurl4-openssl-dev \
-zip \
-openssl && \
+    libcurl4-openssl-dev \
+    zip \
+    ghostscript \
+    openssl && \
     rm -rf /var/lib/apt/lists/* && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Install xdebug
-RUN pecl install xdebug-3.0.0 && \
+RUN pickle install xdebug-3.0.0 && \
     docker-php-ext-enable xdebug
 
 # Install redis
-RUN pecl install redis-5.3.3 && \
+RUN pickle install redis-5.3.3 && \
     docker-php-ext-enable redis
 
 # Install imagick
@@ -65,7 +71,6 @@ RUN cd /usr/local/src && \
     docker-php-ext-enable imagick
 
 # Other PHP8 Extensions
-
 RUN docker-php-ext-install pdo_mysql && \
     docker-php-ext-install pdo_sqlite && \
     docker-php-ext-install mysqli && \
@@ -78,12 +83,11 @@ RUN docker-php-ext-install pdo_mysql && \
     docker-php-ext-install calendar && \
     docker-php-ext-install exif
 
-
 # Install Freetype 
 RUN apt-get -y update && \
     apt-get --no-install-recommends install -y libfreetype6-dev \
-libjpeg62-turbo-dev \
-libpng-dev && \
+    libjpeg62-turbo-dev \
+    libpng-dev && \
     rm -rf /var/lib/apt/lists/* && \
     docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg && \
     docker-php-ext-install gd
@@ -93,4 +97,6 @@ RUN a2enmod rewrite headers
 
 # Cleanup
 RUN apt-get purge -y --auto-remove \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /usr/src/*
+    && rm -rf /var/lib/apt/lists/* /tmp/* /usr/src/* \
+    && apt-get clean autoclean \
+    && rm -rf /var/lib/{apt,dpkg,cache,log}/

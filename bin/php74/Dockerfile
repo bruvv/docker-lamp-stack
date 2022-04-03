@@ -6,7 +6,7 @@ FROM php:7.4.2-apache-buster
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Update
-RUN apt-get -y update --fix-missing --no-install-recommends --no-install-suggests  && \
+RUN apt-get -y update --fix-missing && \
     apt-get upgrade -y && \
     apt-get --no-install-recommends install -y apt-utils && \
     rm -rf /var/lib/apt/lists/*
@@ -78,5 +78,4 @@ libpng-dev && \
 RUN a2enmod rewrite headers
 
 # Cleanup
-RUN apt-get purge -y --auto-remove \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /usr/src/*
+RUN rm -rf /usr/src/*

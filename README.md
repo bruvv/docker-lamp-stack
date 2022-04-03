@@ -1,12 +1,12 @@
-#  LEMP stack built with Docker Compose
+#  LAMP stack built with Docker Compose
 
 ![Landing Page](https://user-images.githubusercontent.com/43859895/141092846-905eae39-0169-4fd7-911f-9ff32c48b7e8.png)
 
 
-A basic LEMP stack environment built using Docker Compose. It consists of the following:
+A basic LAMP stack environment built using Docker Compose. It consists of the following:
 
 * PHP
-* NGINX
+* Apache
 * MySQL
 * phpMyAdmin
 * Redis
@@ -20,7 +20,6 @@ As of now, we have several different PHP versions. Use appropriate php version a
 * 7.3.x
 * 7.4.x
 * 8.0.x
-* 8.1.x
 
  
 ##  Installation
@@ -30,7 +29,7 @@ As of now, we have several different PHP versions. Use appropriate php version a
 * Run the `docker-compose up -d`.
 
 ```shell
-git clone this repo
+git clone https://github.com/sprintcube/docker-compose-lamp.git
 cd docker-compose-lamp/
 cp sample.env .env
 // modify sample.env as needed
@@ -38,7 +37,7 @@ docker-compose up -d
 // visit localhost
 ```
 
-Your LEMP stack is now ready!! You can access it via `http://localhost`. 
+Your LAMP stack is now ready!! You can access it via `http://localhost`. 
 
 ##  Configuration and Usage
 
@@ -62,22 +61,26 @@ _**PHP_INI**_
 Define your custom `php.ini` modification to meet your requirments. 
 
 ---
-#### Nginx 
+#### Apache 
 ---
 
 _**DOCUMENT_ROOT**_
 
-It is a document root for Nginx server. The default value for this is `./www`. All your sites will go here and will be synced automatically.
+It is a document root for Apache server. The default value for this is `./www`. All your sites will go here and will be synced automatically.
 
-_**NGINX_DOCUMENT_ROOT**_
+_**APACHE_DOCUMENT_ROOT**_
 
-Nginx config file value. The default value for this is /var/www/html.
+Apache config file value. The default value for this is /var/www/html.
 
 _**VHOSTS_DIR**_
 
 This is for virtual hosts. The default value for this is `./config/vhosts`. You can place your virtual hosts conf files here.
 
 > Make sure you add an entry to your system's `hosts` file for each virtual host.
+
+_**APACHE_LOG_DIR**_
+
+This will be used to store Apache logs. The default value for this is `./logs/apache2`.
 
 ---
 #### Database
@@ -102,13 +105,13 @@ This is MySQL data directory. The default value for this is `./data/mysql`. All 
 
 _**MYSQL_LOG_DIR**_
 
-This will be used to store mysql logs. The default value for this is `./logs/mysql`.
+This will be used to store Apache logs. The default value for this is `./logs/mysql`.
 
 ## Web Server
 
-Nginx is configured to run on port 80. So, you can access it via `http://localhost`.
+Apache is configured to run on port 80. So, you can access it via `http://localhost`.
 
-#### Nginx Modules
+#### Apache Modules
 
 By default following modules are enabled.
 
