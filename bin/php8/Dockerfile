@@ -53,21 +53,11 @@ RUN apt-get update && \
     apt-get -y --no-install-recommends install --fix-missing libmagickwand-dev && \
     rm -rf /var/lib/apt/lists/*
 
-# Workarround until imagick is available in pecl with php8 support
-# Imagick Commit to install
-# https://github.com/Imagick/imagick
-ARG IMAGICK_COMMIT="132a11fd26675db9eb9f0e9a3e2887c161875206"
-
-RUN cd /usr/local/src && \
-    git clone https://github.com/Imagick/imagick && \
-    cd imagick && \
-    git checkout ${IMAGICK_COMMIT} && \
-    phpize && \
-    ./configure && \
-    make && \
-    make install && \
-    cd .. && \
-    rm -rf imagick && \
+# Install imagick
+RUN apt-get update && \
+    apt-get -y --no-install-recommends install --fix-missing libmagickwand-dev && \
+    rm -rf /var/lib/apt/lists/* && \
+    pickle install imagick && \
     docker-php-ext-enable imagick
 
 # Other PHP8 Extensions
@@ -76,6 +66,7 @@ RUN docker-php-ext-install pdo_mysql && \
     docker-php-ext-install mysqli && \
     docker-php-ext-install curl && \
     docker-php-ext-install tokenizer && \
+    docker-php-ext-install json && \
     docker-php-ext-install zip && \
     docker-php-ext-install -j$(nproc) intl && \
     docker-php-ext-install mbstring && \
@@ -93,7 +84,7 @@ RUN apt-get -y update && \
     docker-php-ext-install gd
 
 # Enable apache modules
-RUN a2enmod rewrite headers
+RUN a2enmod rewrite headers expires
 
 # Cleanup
 RUN apt-get purge -y --auto-remove \
