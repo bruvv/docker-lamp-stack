@@ -52,7 +52,7 @@ services:
 
   traefik:
     image: traefik:latest
-    container_name: traefik
+    container_name: "${COMPOSE_PROJECT_NAME}-traefik"
     restart: ${RESTART}
     ports:
       - "80:80"
