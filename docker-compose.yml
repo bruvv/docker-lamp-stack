@@ -20,7 +20,6 @@ services:
       - PGID
     labels:
       - "traefik.enable=true"
-      - "treafik.docker.network=${TRAEFIK_NETWORK}"
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME}.rule=Host(`${URL}`) || Host(`www.${URL}`)"
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME}.entrypoints=websecure"
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME}.tls=true"
@@ -50,3 +49,20 @@ services:
   redis:
     container_name: "${COMPOSE_PROJECT_NAME}-redis"
     image: redis:latest
+
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    restart: ${RESTART}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "${TRAEFIK_ACME_DIR-./config/traefik/acme}:/letsencrypt"
+      - "${TRAEFIK_RULES_DIR-./config/traefik/rules:/rules"
+      - "${TRAEFIK_TRAEFIK_CONF-./config/traefik/traefik.yaml:/etc/traefik/traefik.yaml"
+    environment:
+      - TZ
+      - PUID
+      - PGID
