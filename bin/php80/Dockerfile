@@ -1,0 +1,1 @@
+FROM ghcr.io/bruvv/docker-php-stack:PHP80-latest
