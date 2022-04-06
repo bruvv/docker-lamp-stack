@@ -3,5 +3,6 @@
   "automerge": false,
   "assigneesFromCodeOwners": true,
   "forkMode": true,
-  "includeForks": true
+  "includeForks": true,
+  "ignoreDeps": ["php"]
 }
