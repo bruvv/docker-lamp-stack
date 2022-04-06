@@ -4,5 +4,5 @@
   "assigneesFromCodeOwners": true,
   "forkMode": true,
   "includeForks": true,
-  "ignoreDeps": ["php"]
+  "ignorePaths": ["**/bin/**"]
 }
